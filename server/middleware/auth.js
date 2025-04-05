@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
       console.error("Error verifying PASETO token:", error);
       throw createError({
         statusCode: 401,
-        message: `Unauthorized: Invalid token ${payload} ${error}`,
+        message: `token:${token} pastoSecret:${useRuntimeConfig().paseto.secret} secretkey:${secretKey} error:${error}`,
       });
     }
   }
