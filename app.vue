@@ -49,13 +49,17 @@ async function fetchProtectApi() {
 }
 
 async function getToken() {
-  const { user } = await $fetch("/api/token", {
-    method: "POST",
-    body: {
-      userId: name.value,
-    },
-  });
-  userData.value = user;
-  token.value = user.access_token;
+  try {
+    const { user } = await $fetch("/api/token", {
+      method: "POST",
+      body: {
+        userId: name.value,
+      },
+    });
+    userData.value = user;
+    token.value = user.access_token;
+  } catch (err) {
+    console.log(err);
+  }
 }
 </script>

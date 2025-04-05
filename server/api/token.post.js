@@ -22,11 +22,9 @@ export default defineEventHandler(async (event) => {
   try {
     const accessToken = await generatePasetoToken(userId);
 
-    console.log(userId);
-
     return { user: { user_id: userId, access_token: accessToken } };
   } catch (err) {
     console.log(err);
-    return { err };
+    return err;
   }
 });
