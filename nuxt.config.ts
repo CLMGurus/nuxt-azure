@@ -5,11 +5,12 @@ export default defineNuxtConfig({
   devServer: {
     port: 8080,
     host: "0.0.0.0",
-    url: "/ds",
+    https: true,
   },
   server: {
     port: 8080,
     host: "0.0.0.0",
+    https: true,
   },
   runtimeConfig: {
     paseto: {
