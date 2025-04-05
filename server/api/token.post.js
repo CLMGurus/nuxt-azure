@@ -1,4 +1,5 @@
 import paseto from "paseto";
+import crypto from "crypto";
 
 const { V3 } = paseto;
 
