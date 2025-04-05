@@ -6,6 +6,7 @@ export default defineEventHandler(async (event) => {
   const protectedRoutes = ["/api/protect"];
 
   const authHeader = getHeader(event, "Authorization");
+  let payload;
 
   if (protectedRoutes.some((route) => event.path.startsWith(route))) {
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -19,13 +20,13 @@ export default defineEventHandler(async (event) => {
     const secretKey = Buffer.from(useRuntimeConfig().paseto.secret, "base64");
 
     try {
-      const payload = await V3.decrypt(token, secretKey);
+      payload = await V3.decrypt(token, secretKey);
       event.context.auth = { user: payload };
     } catch (error) {
       console.error("Error verifying PASETO token:", error);
       throw createError({
         statusCode: 401,
-        message: "Unauthorized: Invalid token",
+        message: `Unauthorized: Invalid token ${payload} ${error}`,
       });
     }
   }
