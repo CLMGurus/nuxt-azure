@@ -1,5 +1,6 @@
 export default defineEventHandler((event) => {
   return {
-    hello: "world",
+    event: event,
+    message: `this is protected`,
   };
 });
