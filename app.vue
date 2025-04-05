@@ -39,7 +39,7 @@ async function fetchProtectApi() {
     const response = await $fetch("/api/protect", {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token.value}`,
+        "x-auth-token": `Bearer ${token.value}`,
       },
     });
     data.value = response;

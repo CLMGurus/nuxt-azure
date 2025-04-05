@@ -3,24 +3,27 @@ import paseto from "paseto";
 const { V3 } = paseto;
 
 export default defineEventHandler(async (event) => {
-  const protectedRoutes = ["/api/protect"];
+  const protectedRoutes = ["/api/protect"]; // Add more protected routes as needed
 
-  const authHeader = getHeader(event, "Authorization");
-  let payload;
-
+  // Only apply auth check if route matches protected paths
   if (protectedRoutes.some((route) => event.path.startsWith(route))) {
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    const tokenHeader = getHeader(event, "x-auth-token");
+
+    if (!tokenHeader) {
       throw createError({
         statusCode: 401,
         message: "Unauthorized: No token provided",
       });
     }
 
-    const token = authHeader.split(" ")[1];
+    const token = tokenHeader.trim().startsWith("Bearer ")
+      ? tokenHeader.split(" ")[1]
+      : tokenHeader;
+
     const secretKey = Buffer.from(useRuntimeConfig().paseto.secret, "base64");
 
     try {
-      payload = await V3.decrypt(token, secretKey);
+      const payload = await V3.decrypt(token, secretKey);
       event.context.auth = { user: payload };
     } catch (error) {
       console.error("Error verifying PASETO token:", error);
